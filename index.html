@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Для тебя ❤️</title>
     <style>
+        :root {
+            --bg-color: #f7ebeb;
+            --env-color: #f2bbc9;
+            --env-dark: #e8a7b7;
+            --paper-color: #ffffff;
+            --text-main: #4a2831;
+            --accent: #d94b68;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,133 +25,226 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #ffe5ec, #ffb3c6);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
-            position: relative;
+            perspective: 1000px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(225, 112, 150, 0.3);
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            max-width: 90%;
-            width: 400px;
-            z-index: 10;
-            transform: scale(0.9);
-            animation: appear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes appear {
-            to { transform: scale(1); }
-        }
-
-        h1 {
-            color: #ff4d6d;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        }
-
-        p {
-            color: #590d22;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #ff4d6d;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
-        }
-
-        .btn:hover {
-            background: #ff758f;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Стили для падающих сердечек */
-        .heart {
+        /* Мягкий движущийся свет на фоне */
+        body::before {
+            content: '';
             position: absolute;
-            color: #ffb3c6;
-            font-size: 20px;
-            pointer-events: none;
-            animation: fall linear forwards;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(242,187,201,0.2) 60%);
+            animation: ambientLight 15s infinite alternate ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes ambientLight {
+            0% { transform: translate(-10%, -10%); }
+            100% { transform: translate(10%, 10%); }
+        }
+
+        /* Контейнер всей сцены */
+        .envelope-wrapper {
+            position: relative;
+            width: 380px;
+            height: 260px;
+            background-color: var(--env-dark);
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 20px 40px rgba(74, 40, 49, 0.15);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-5px) rotate(-1deg);
+        }
+
+        /* Верхний клапан конверта */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid transparent;
+            border-right: 190px solid transparent;
+            border-top: 140px solid var(--env-color);
+            transform-origin: top;
+            transition: transform 0.4s ease-in-out, z-index 0.2s ease-in-out;
+            z-index: 4;
+            filter: drop-shadow(0 4px 3px rgba(0,0,0,0.05));
+        }
+
+        /* Боковые и нижние стороны конверта */
+        .envelope-front {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 190px solid var(--env-color);
+            border-right: 190px solid rgba(242, 187, 201, 0.95);
+            border-bottom: 130px solid var(--env-color);
+            border-top: 130px solid transparent;
+            bottom: 0;
+            left: 0;
+            border-radius: 0 0 12px 12px;
+            z-index: 3;
+        }
+
+        /* Письмо внутри */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            width: 340px;
+            height: 230px;
+            background: var(--paper-color);
+            border-radius: 8px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .letter h1 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .letter p {
+            font-size: 1rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Сургучная печать */
+        .wax-seal {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(217, 75, 104, 0.4);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Состояние анимации при клике */
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
             z-index: 1;
         }
 
-        @keyframes fall {
-            0% {
-                transform: translateY(-20px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(105vh) rotate(360deg);
-                opacity: 0;
-            }
+        .envelope-wrapper.open .wax-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.5);
+            pointer-events: none;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-150px);
+            z-index: 5;
+            height: 280px;
+            box-shadow: 0 20px 50px rgba(74, 40, 49, 0.12);
+        }
+
+        /* Плавные искры-сердечки на фоне */
+        .floating-heart {
+            position: absolute;
+            color: var(--accent);
+            opacity: 0.15;
+            pointer-events: none;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Подсказка внизу */
+        .hint {
+            position: absolute;
+            bottom: 40px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            text-transform: uppercase;
+            animation: pulse 2s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 0.7; transform: translateY(-3px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Я тебя люблю! ❤️</h1>
-        <p>Ты — самое лучшее, что есть в моей жизни. Спасибо за то, что ты рядом.</p>
-        <button class="btn" onclick="celebrate()">Нажми меня</button>
+    <div class="envelope-wrapper" onclick="toggleEnvelope(this)">
+        <div class="envelope-flap"></div>
+        <div class="envelope-front"></div>
+        <div class="wax-seal">❤️</div>
+        <div class="letter">
+            <h1>Я тебя люблю! ❤️</h1>
+            <p>Ты — самое лучшее, что случилось со мной. Спасибо за то, что ты есть в моей жизни, за твою улыбку и тепло.</p>
+        </div>
     </div>
 
+    <div class="hint">Нажми на конверт</div>
+
     <script>
-        // Функция создания падающих сердечек
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            
-            // Случайные настройки для каждого сердечка
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // от 2 до 5 секунд
-            heart.style.fontSize = Math.random() * 20 + 15 + 'px'; // от 15 до 35 пикселей
-            
-            // Массив нежных цветов для разнообразия
-            const colors = ['#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c6', '#c9184a'];
-            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-
-            document.body.appendChild(heart);
-
-            // Удаляем элемент после завершения анимации
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }
-
-        // Постоянно создаем фоновые сердечки
-        setInterval(createHeart, 400);
-
-        // Функция при клике на кнопку (взрыв из сердечек)
-        function celebrate() {
-            for(let i = 0; i < 30; i++) {
-                setTimeout(createHeart, i * 50);
+        // Функция открытия конверта
+        function toggleEnvelope(element) {
+            element.classList.toggle('open');
+            const hint = document.querySelector('.hint');
+            if(element.classList.contains('open')) {
+                hint.style.display = 'none';
+            } else {
+                hint.style.display = 'block';
             }
         }
+
+        // Эстетичные фоновые микро-сердечки
+        function createAmbientHearts() {
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                document.body.appendChild(heart);
+            }
+        }
+        createAmbientHearts();
     </script>
 </body>
 </html>
