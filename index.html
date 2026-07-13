@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe5ec, #ffb3c6);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(225, 112, 150, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 90%;
+            width: 400px;
+            z-index: 10;
+            transform: scale(0.9);
+            animation: appear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes appear {
+            to { transform: scale(1); }
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        p {
+            color: #590d22;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ff4d6d;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn:hover {
+            background: #ff758f;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Стили для падающих сердечек */
+        .heart {
+            position: absolute;
+            color: #ffb3c6;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Я тебя люблю! ❤️</h1>
+        <p>Ты — самое лучшее, что есть в моей жизни. Спасибо за то, что ты рядом.</p>
+        <button class="btn" onclick="celebrate()">Нажми меня</button>
+    </div>
+
+    <script>
+        // Функция создания падающих сердечек
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            
+            // Случайные настройки для каждого сердечка
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // от 2 до 5 секунд
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px'; // от 15 до 35 пикселей
+            
+            // Массив нежных цветов для разнообразия
+            const colors = ['#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c6', '#c9184a'];
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+            document.body.appendChild(heart);
+
+            // Удаляем элемент после завершения анимации
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // Постоянно создаем фоновые сердечки
+        setInterval(createHeart, 400);
+
+        // Функция при клике на кнопку (взрыв из сердечек)
+        function celebrate() {
+            for(let i = 0; i < 30; i++) {
+                setTimeout(createHeart, i * 50);
+            }
+        }
+    </script>
+</body>
+</html>
